@@ -2,6 +2,7 @@ import { ChevronRight, Plus, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import noData from "../assets/noData.svg";
+import axios from "axios";
 const allSubjects = [
   { code: "CS6801", name: "Electronic and Communication" },
   { code: "CS6802", name: "Computer Networks" },
@@ -38,15 +39,21 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
   const params = new URLSearchParams(location.search);
   const dept = params.get("dept");
 
+  const token = localStorage.getItem("LmsToken");
+
   // states
   const [semesterType, setSemesterType] = useState("odd");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  // const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [selectedSemester, setSelectedSemester] = useState(1);
   const [selectedType, setSelectedType] = useState("Theory");
   const [selectedStaff, setSelectedStaff] = useState(null);
+  console.log("selectedStaff",selectedStaff)
   const [staffSearch, setStaffSearch] = useState("");
   const [isStaffList, setIsStaffList] = useState(false);
+  const [regulation, setRegulation] = useState("");
+  console.log("regulation", regulation);
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
 
   // ref's
   const dropdownRef = useRef(null);
@@ -93,12 +100,49 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
   const oddSemesters = [1, 3, 5, 7];
   const evenSemesters = [2, 4, 6, 8];
 
-  const handleSubjectToggle = (code) => {
-    setSelectedSubjects((prev) =>
-      prev.includes(code)
-        ? prev.filter((item) => item !== code)
-        : [...prev, code]
+  const handleSubjectToggle = (subjectObj) => {
+    setSelectedSubjects((prev) => {
+      const exists = prev.some((s) => s.code === subjectObj.code);
+      if (exists) {
+        // remove it
+        return prev.filter((s) => s.code !== subjectObj.code);
+      } else {
+        // add it
+        return [...prev, subjectObj];
+      }
+    });
+  };
+
+  const handleSave = async () => {
+    const cleanSubjects = selectedSubjects.filter(
+      (s) => s.code.trim() !== "" && s.subject.trim() !== ""
     );
+    const data = {
+      semester: selectedSemester,
+      semesterType: semesterType,
+      subjectType: selectedType,
+      regulation: regulation,
+      subjects: cleanSubjects,
+      department: dept,
+    };
+
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/adminAllocation/subjects",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 👈 required header
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(res.data);
+      alert("Subjects saved successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to save subjects");
+    }
   };
 
   return (
@@ -107,8 +151,14 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
         {/* Header */}
         <div className="header-container mt-4 flex justify-end">
           <div className="container w-[600px] flex gap-4 items-center">
-            <select className="w-[200px] outline-none border border-gray-400 px-3 py-2 rounded">
-              <option disabled>Select Regulation</option>
+            <select
+              className="w-[200px] outline-none border border-gray-400 px-3 py-2 rounded"
+              value={regulation}
+              onChange={(e) => setRegulation(e.target.value)}
+            >
+              <option value="" disabled>
+                Select Regulation
+              </option>
               <option value="2026">2026</option>
               <option value="2029">2029</option>
               <option value="2032">2032</option>
@@ -204,6 +254,14 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
                         </div>
                       )}
                     </div>
+                    <div className="button-container mt-2 w-full flex gap-4 items-center justify-end">
+                      <button className="bg-gray-100 px-3 py-2 text-sm rounded font-medium">
+                        Cancel
+                      </button>
+                      <button className="bg-[#0B56A4] px-3 py-2 text-sm rounded text-white font-medium">
+                        Update
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
@@ -287,10 +345,13 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
                       >
                         <input
                           type="checkbox"
-                          checked={selectedSubjects.includes(sub.code)}
-                          onChange={() => handleSubjectToggle(sub.code)}
+                          checked={selectedSubjects.some(
+                            (s) => s.code === sub.code
+                          )}
+                          onChange={() => handleSubjectToggle(sub)}
                           className="accent-[#0b55a3]"
                         />
+
                         <span className="text-gray-800">
                           {sub.code} - {sub.subject}
                         </span>
@@ -315,7 +376,10 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
           <button className="px-4 py-2 border rounded text-gray-900 bg-gray-100 border-gray-400 cursor-pointer">
             Cancel
           </button>
-          <button className="px-4 py-2 bg-[#0B56A4] text-white rounded">
+          <button
+            className="px-4 py-2 bg-[#0B56A4] text-white rounded"
+            onClick={handleSave}
+          >
             Save
           </button>
         </div>
