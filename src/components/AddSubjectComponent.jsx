@@ -12,27 +12,6 @@ const allSubjects = [
   { code: "CS6806", name: "Cloud Computing" },
 ];
 
-// const staffList = [
-//   { id: 1, name: "Surya Chandran", img: "https://via.placeholder.com/40" },
-//   { id: 2, name: "Rahul Kumar", img: "https://via.placeholder.com/40" },
-//   { id: 3, name: "Anita Raj", img: "https://via.placeholder.com/40" },
-//   { id: 3, name: "Anita Raj", img: "https://via.placeholder.com/40" },
-//   { id: 3, name: "Anita Raj", img: "https://via.placeholder.com/40" },
-//   { id: 3, name: "Anita Raj", img: "https://via.placeholder.com/40" },
-//   { id: 3, name: "Anita Raj", img: "https://via.placeholder.com/40" },
-//   { id: 3, name: "Anita Raj", img: "https://via.placeholder.com/40" },
-//   { id: 3, name: "Anita Raj", img: "https://via.placeholder.com/40" },
-//   { id: 3, name: "Anita Raj", img: "https://via.placeholder.com/40" },
-//   { id: 3, name: "Anita Raj", img: "https://via.placeholder.com/40" },
-//   { id: 3, name: "Anita Raj", img: "https://via.placeholder.com/40" },
-//   { id: 3, name: "Anita Raj", img: "https://via.placeholder.com/40" },
-//   { id: 3, name: "Anita Raj", img: "https://via.placeholder.com/40" },
-//   { id: 3, name: "Anita Raj", img: "https://via.placeholder.com/40" },
-//   { id: 3, name: "Anita Raj", img: "https://via.placeholder.com/40" },
-//   { id: 3, name: "Anita Raj", img: "https://via.placeholder.com/40" },
-//   { id: 4, name: "Ravi Teja", img: "https://via.placeholder.com/40" },
-// ];
-
 const AddSubjectComponent = ({ facultyData, subjectData }) => {
   //    params
   const location = useLocation();
@@ -48,7 +27,7 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
   const [selectedSemester, setSelectedSemester] = useState(1);
   const [selectedType, setSelectedType] = useState("Theory");
   const [selectedStaff, setSelectedStaff] = useState(null);
-  console.log("selectedStaff",selectedStaff)
+  console.log("selectedStaff", selectedStaff);
   const [staffSearch, setStaffSearch] = useState("");
   const [isStaffList, setIsStaffList] = useState(false);
   const [regulation, setRegulation] = useState("");

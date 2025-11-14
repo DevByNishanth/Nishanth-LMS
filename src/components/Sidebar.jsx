@@ -19,6 +19,8 @@ import facultyIcon from "../assets/totalFacultyIcon.svg";
 import facultyActiveIcon from "../assets/facultyActiveIcon.svg";
 import { Link } from "react-router-dom";
 const Sidebar = () => {
+  const role = "hod";
+
   const [collapsed, setCollapsed] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -26,13 +28,17 @@ const Sidebar = () => {
     {
       icon: dashboard,
       label: "Dashboard",
+      hodLable: "Dashboard",
       activeIcon: facultyActiveIcon,
       link: "/dashboard",
+      hodLink: "/hodDashboard",
     },
     {
       icon: semIcon,
       label: "Subject Management",
+      hodLable: "Subject Management",
       link: "/dashboard/semesterRegistration",
+      hodLink: "/dashboard/hod_subjectmanagement",
     },
     {
       icon: facultyIcon,
@@ -42,6 +48,11 @@ const Sidebar = () => {
     },
   ];
 
+  // hide faculty management for HOD
+  const filteredNavItems = navItems.filter((item) => {
+    if (role === "hod" && item.label === "Faculty Management") return false;
+    return true;
+  });
   return (
     <div className="relative">
       {/* Sidebar */}
@@ -84,9 +95,9 @@ const Sidebar = () => {
 
           {/* Buttons */}
 
-          {navItems.map((item, index) => (
+          {filteredNavItems.map((item, index) => (
             <Link
-              to={item.link}
+              to={role.toLowerCase() == "hod" ? item.hodLink : item.link}
               key={index}
               onClick={() => setActiveIndex(index)}
               className={`relative h-[54px] flex items-center cursor-pointer z-10 transition-colors duration-200 px-4 ${

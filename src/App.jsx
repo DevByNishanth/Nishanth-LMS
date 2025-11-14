@@ -7,6 +7,7 @@ import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
 import SemesterRegistrationPage from "./pages/SemesterRegistrationPage";
 import AddSubjectPage from "./pages/AddSubjectPage";
+import HodSubjectmanagementpage from "./pages/HodSubjectmanagementpage";
 
 const App = () => {
   return (
@@ -27,6 +28,10 @@ const App = () => {
         <Route
           path="/dashboard/semesterRegistration/addSubject"
           element={<AddSubjectPage />}
+        />
+        <Route
+          path="/dashboard/hod_subjectmanagement"
+          element={<HodSubjectmanagementpage />}
         />
       </Routes>
     </>
