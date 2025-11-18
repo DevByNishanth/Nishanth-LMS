@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import SemesterRegistrationPage from "./pages/SemesterRegistrationPage";
 import AddSubjectPage from "./pages/AddSubjectPage";
 import HodSubjectmanagementpage from "./pages/HodSubjectmanagementpage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
   return (
@@ -16,22 +17,22 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route
           path="/dashboard/facultyManagement"
-          element={<FacultyManagementPage />}
+          element={<ProtectedRoute><FacultyManagementPage /></ProtectedRoute>}
         />
         <Route
           path="/dashboard/semesterRegistration"
-          element={<SemesterRegistrationPage />}
+          element={<ProtectedRoute><SemesterRegistrationPage /></ProtectedRoute>}
         />
         <Route
           path="/dashboard/semesterRegistration/addSubject"
-          element={<AddSubjectPage />}
+          element={<ProtectedRoute><AddSubjectPage /></ProtectedRoute>}
         />
         <Route
           path="/dashboard/hod_subjectmanagement"
-          element={<HodSubjectmanagementpage />}
+          element={<ProtectedRoute><HodSubjectmanagementpage /></ProtectedRoute>}
         />
       </Routes>
     </>

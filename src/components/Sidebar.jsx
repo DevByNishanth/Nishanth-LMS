@@ -20,6 +20,7 @@ import facultyActiveIcon from "../assets/facultyActiveIcon.svg";
 import { Link } from "react-router-dom";
 const Sidebar = () => {
   const role = "hod";
+  // const role = "admin";
 
   const [collapsed, setCollapsed] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);

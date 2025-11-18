@@ -1,4 +1,5 @@
-import { ChevronRight, Pencil, Plus, Trash, X } from "lucide-react";
+import axios from "axios";
+import { ArrowRight, ChevronRight, Pencil, Plus, Trash, X } from "lucide-react";
 import React, { useState } from "react";
 
 const tableHeader = ["Subject", "Section", "Staff", "Action"];
@@ -14,7 +15,7 @@ const HodSubjectDetailsComponent = () => {
   const [selectedType, setSelectedType] = useState("theory");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSubjectIndex, setSelectedSubjectIndex] = useState(null);
-
+  const [selectedId, setSelectedId] = useState(null)
   const [selectedSection, setSelectedSection] = useState("");
   const [selectedStaff, setSelectedStaff] = useState("");
   // const [subjectData, setSubjectData] = useState([
@@ -36,10 +37,42 @@ const HodSubjectDetailsComponent = () => {
     {
       subject: "CS6801 - Electronic and communication",
       sections: [],
+      _id: 1
     },
     {
       subject: "CS6802 - Electronic and communication",
       sections: [],
+      _id: 2
+    },
+    {
+      subject: "CS6803 - Java",
+      sections: [],
+      _id: 3
+    },
+    {
+      subject: "CS6803 - Java",
+      sections: [],
+      _id: 3
+    },
+    {
+      subject: "CS6803 - Java",
+      sections: [],
+      _id: 3
+    },
+    {
+      subject: "CS6803 - Java",
+      sections: [],
+      _id: 3
+    },
+    {
+      subject: "CS6803 - Java",
+      sections: [],
+      _id: 3
+    },
+    {
+      subject: "CS6803 - Java",
+      sections: [],
+      _id: 3
     },
   ]);
 
@@ -53,21 +86,41 @@ const HodSubjectDetailsComponent = () => {
       )}`,
       staff: "Select Staff",
     });
+    console.log("new data : ", newData)
     setSubjectData(newData);
   };
 
-  const openModal = (index) => {
+  const openModal = (index, id) => {
+    console.log("selected id : ", id);
+    setSelectedId(id)
     setSelectedSubjectIndex(index);
     setSelectedSection(""); // reset
     setSelectedStaff(""); // reset
     setIsModalOpen(true);
   };
 
-  const saveSectionAndStaff = () => {
+  const saveSectionAndStaff = async () => {
     if (!selectedSection || !selectedStaff) {
       alert("Please select both fields");
       return;
     }
+    if (selectedId == null) {
+      console.error("Error occured => Id is not selected")
+    }
+    const payload = {
+      selectedId: selectedId,
+      sectionName: selectedSection,
+      staff: selectedStaff
+    }
+    // try {
+    //   const response = await axios.put(`http://api/postSectionData/${selectedId}`, {
+    //     payload
+    //   });
+    //   setSelectedId(null)
+    // } catch (err) {
+    //   setSelectedId(null)
+    // }
+
 
     const newData = [...subjectData];
     newData[selectedSubjectIndex].sections.push({
@@ -104,64 +157,65 @@ const HodSubjectDetailsComponent = () => {
         {/* bg-[#08384F] */}
         {/* body section -------------------  */}
         <div className="main-container grid grid-cols-12 gap-2 mt-4">
-          <div className="first-tab-container h-[calc(100vh-160px)] border border-gray-300 rounded-lg col-span-3 px-4 py-6">
+          <div className="first-tab-container max-h-[calc(100vh-160px)] overflow-auto border border-gray-300 rounded-lg col-span-3 px-4 py-6">
             <button
               onClick={() => setSelectedType("theory")}
-              className={`w-full   flex gap-2 items-center justify-between px-4 py-2 rounded-lg ${
-                selectedType.toLowerCase() == "theory"
-                  ? "bg-[#0B56A4] text-white"
-                  : "border border-gray-300"
-              }`}
+              className={`w-full   flex gap-2 items-center justify-between px-4 py-2 rounded-lg ${selectedType.toLowerCase() == "theory"
+                ? "bg-[#0B56A4] text-white"
+                : "border border-gray-300"
+                }`}
             >
               Theory <ChevronRight />
             </button>
             <button
               onClick={() => setSelectedType("lab")}
-              className={`w-full mt-2 flex gap-2 items-center justify-between px-4 py-2 rounded-lg ${
-                selectedType.toLowerCase() == "lab"
-                  ? "bg-[#0B56A4] text-white"
-                  : "border border-gray-300"
-              }`}
+              className={`w-full mt-2 flex gap-2 items-center justify-between px-4 py-2 rounded-lg ${selectedType.toLowerCase() == "lab"
+                ? "bg-[#0B56A4] text-white"
+                : "border border-gray-300"
+                }`}
             >
               Lab <ChevronRight />
             </button>
           </div>
-          <div className="second-tab-container rounded-lg col-span-9">
-            <table className="w-[100%]  max-h-[calc(100vh-160px)]">
-              <tr className=" thead text-black ">
+          <div className="second-tab-container rounded-lg col-span-9 max-h-[calc(100vh-160px)] overflow-auto">
+            <table className="w-[100%]   ">
+              <tr className=" thead text-black sticky top-0 z-10">
                 {tableHeader.map((item) => {
                   return <th className="pl-4 py-2">{item}</th>;
                 })}
               </tr>
-              <tbody className="border border-gray-300">
+              <tbody className="border border-gray-300 ">
                 {subjectData.map((item, index) => {
                   return (
                     <>
                       {/* MAIN ROW */}
 
                       <tr className="border-t border-gray-400 ">
-                        <td className="pl-4 py-3 w-[30%]">{item.subject}</td>
+                        <td className="pl-4 py-3 w-[30%] border-rd border-gray-400">{item.subject}</td>
 
                         {/* Section Column */}
-                        <td className="py-3">
+                        <td className="py-3 pr-4 ">
                           {/* Show all existing sections */}
                           {item.sections.map((sec, secIndex) => (
-                            <div
-                              key={secIndex}
-                              className="px-3 py-2 my-1 rounded w-fit ml-20 bg-[#eef3ff]"
-                            >
-                              {sec.sectionName}
-                            </div>
+                            <section className="flex items-center gap-4">
+                              <div
+                                key={secIndex}
+                                className="px-3  py-2 my-1 rounded w-fit ml-10 bg-[#eef3ff] "
+                              >
+                                {sec.sectionName}
+                              </div>
+                              <h1><ArrowRight /></h1>
+                            </section>
                           ))}
                         </td>
 
                         {/* Staff Column */}
-                        <td className="py-3">
+                        <td className="py-3 ">
                           {item.sections.length === 0 ? (
                             <div>---</div>
                           ) : (
                             item.sections.map((sec) => (
-                              <div className="px-3 py-2 my-1 w-fit ml-20 rounded">
+                              <div className="px-3 py-2 my-2 w-fit ml-10 rounded ">
                                 {sec.staff}
                               </div>
                             ))
@@ -169,26 +223,26 @@ const HodSubjectDetailsComponent = () => {
                         </td>
 
                         {/* Action Column */}
-                        <td className="py-3">
+                        <td className="">
                           {item.sections.length === 0
                             ? ""
                             : item.sections.map(() => (
-                                <div className="flex items-center gap-3 my-1">
-                                  <button className="bg-[#00A343]  text-white w-8 h-8 flex p-2 justify-center items-center rounded-full">
-                                    <Pencil className="w-4 h-4" />
-                                  </button>
-                                  <button className="bg-[#F24343] text-white w-8 h-8 flex p-2 justify-center items-center rounded-full">
-                                    <Trash className="w-4 h-4" />
-                                  </button>
-                                </div>
-                              ))}
+                              <div className="flex items-center gap-3 my-3">
+                                <button className="bg-[#00A343]  text-white w-8 h-8 flex p-2 justify-center items-center rounded-full">
+                                  <Pencil className="w-4 h-4" />
+                                </button>
+                                <button className="bg-[#F24343] text-white w-8 h-8 flex p-2 justify-center items-center rounded-full">
+                                  <Trash className="w-4 h-4" />
+                                </button>
+                              </div>
+                            ))}
                         </td>
                       </tr>
                       {/* Button should ALWAYS be visible */}
-                      <div className="btn-container w-fit m-auto mb-2 translate-x-[250px]">
+                      <div className="btn-container w-fit m-auto mb-2 translate-x-[320px]">
                         <button
-                          onClick={() => openModal(index)}
-                          className="flex gap-2 items-center bg-[#0B56A4] text-white px-3 py-2 rounded mt-2"
+                          onClick={() => openModal(index, item._id)}
+                          className="flex gap-2 items-center bg-[#0B56A4] hover:bg-[#0b55a4da]  cursor-pointer w-[250px] text-center text-white px-3 py-2 rounded mt-2"
                         >
                           <Plus /> Add Section and Staff
                         </button>
