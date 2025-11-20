@@ -17,22 +17,53 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/dashboard/facultyManagement"
-          element={<ProtectedRoute><FacultyManagementPage /></ProtectedRoute>}
+          element={
+            <ProtectedRoute>
+              <FacultyManagementPage />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/dashboard/semesterRegistration"
-          element={<ProtectedRoute><SemesterRegistrationPage /></ProtectedRoute>}
+          element={
+            <ProtectedRoute>
+              <SemesterRegistrationPage />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/dashboard/semesterRegistration/addSubject"
-          element={<ProtectedRoute><AddSubjectPage /></ProtectedRoute>}
+          element={
+            <ProtectedRoute>
+              <AddSubjectPage />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/dashboard/hod_subjectmanagement"
-          element={<ProtectedRoute><HodSubjectmanagementpage /></ProtectedRoute>}
+          element={
+            <ProtectedRoute>
+              <HodSubjectmanagementpage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/subjectManagement"
+          element={
+            <ProtectedRoute>
+              <HodSubjectmanagementpage />
+            </ProtectedRoute>
+          }
         />
       </Routes>
     </>

@@ -19,8 +19,8 @@ import facultyIcon from "../assets/totalFacultyIcon.svg";
 import facultyActiveIcon from "../assets/facultyActiveIcon.svg";
 import { Link } from "react-router-dom";
 const Sidebar = () => {
-  const role = "hod";
-  // const role = "admin";
+  // const role = "hod";
+  const role = "admin";
 
   const [collapsed, setCollapsed] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -46,6 +46,12 @@ const Sidebar = () => {
       label: "Faculty Management",
       activeIcon: facultyActiveIcon,
       link: "/dashboard/facultyManagement",
+    },
+    {
+      icon: facultyIcon,
+      label: "Subject Management",
+      activeIcon: facultyActiveIcon,
+      link: "/dashboard/subjectManagement",
     },
   ];
 
