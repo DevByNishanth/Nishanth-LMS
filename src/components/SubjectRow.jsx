@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Plus, Pencil, Edit, PencilIcon, Search } from "lucide-react";
 import man from "../assets/man.svg";
+import axios from "axios";
 const staffList = [
   {
     id: 1,
@@ -24,12 +25,30 @@ const staffList = [
   },
 ];
 
-export default function SubjectRow({ item }) {
+export default function SubjectRow({
+  item,
+  facultyDetails,
+  selectedDept,
+  selectedType,
+  selectedSemester,
+  selectedRegulation,
+  setSelectedDept,
+  setSelectedType,
+  setSelectedSemester,
+  setSelectedRegulation,
+}) {
+  // Auth ------------------>
+  const token = localStorage.getItem("LmsToken");
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   // states ------------------------>
   const [searchText, setSearchText] = useState("");
   const [selectedStaff, setSelectedStaff] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalSectionIndex, setModalSectionIndex] = useState(null);
+  const [selectedSection, setSelectedSection] = useState(null);
+  const [selectedSubjectName, setSelectedSubjectName] = useState(null);
+  const [subjectId, setSubjectId] = useState(null);
 
   // ref's --------------------->
   const dropdownRef = useRef(null);
@@ -51,19 +70,47 @@ export default function SubjectRow({ item }) {
   // functions --------------------------------------->
 
   // search functionality
-  const filteredStaff = staffList.filter((staff) =>
+  const filteredStaff = facultyDetails.filter((staff) =>
     staff.name.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  // open stafflist functionality ------------------->
+  const handleOpen = (sec) => {
+    setSubjectId(item.id);
+    setSelectedSection(sec.sectionName);
+    setSelectedSubjectName(item.subject);
+    setIsModalOpen(true);
+  };
+
+  // API call post
+  async function handleSelectStaff(staff) {
+    const payload = {
+      department: selectedDept,
+      type: selectedType,
+      semester: Number(selectedSemester),
+      regulation: selectedRegulation,
+      subjectId: subjectId,
+      sectionName: selectedSection,
+      staffId: staff.id,
+    };
+
+    console.log("payload : ", payload);
+    const response = await axios.post(
+      `${apiUrl}api/allocation/assign-staff`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("resp : ", response);
+  }
 
   return (
     <>
       {item.sections.map((sec, secIndex) => (
-        <tr
-          key={secIndex}
-          className={`${
-            sec.staff === null ? "bg-[#eef2ff]" : "bg-white"
-          } border border-gray-300 text-sm`}
-        >
+        <tr key={secIndex} className={` border border-gray-300 text-sm`}>
           {/* SUBJECT (Only for the first section row) */}
           {secIndex === 0 && (
             <td
@@ -78,7 +125,11 @@ export default function SubjectRow({ item }) {
           <td className="px-4 py-3 w-[35%]">{sec.sectionName}</td>
 
           {/* STAFF */}
-          <td className="px-4 py-3 w-[100%] flex items-center gap-2">
+          <td
+            className={`px-4 py-3 w-[100%] flex items-center gap-2 ${
+              sec.staff === null ? "bg-[#eef2ff]" : "bg-white"
+            }`}
+          >
             {sec.staff ? (
               <>
                 <span className="flex items-center gap-6">
@@ -90,7 +141,7 @@ export default function SubjectRow({ item }) {
               <button
                 onClick={() => {
                   setModalSectionIndex(secIndex);
-                  setIsModalOpen(true);
+                  handleOpen(sec);
                 }}
                 className="w-10 cursor-pointer h-10 p-2 rounded-full bg-white flex items-center justify-center border border-gray-100"
               >
@@ -139,7 +190,10 @@ export default function SubjectRow({ item }) {
                     type="radio"
                     name="staff"
                     checked={selectedStaff?.id === staff.id}
-                    onChange={() => setSelectedStaff(staff)}
+                    onChange={() => {
+                      setSelectedStaff(staff);
+                      handleSelectStaff(staff);
+                    }}
                     className="scale-120 accent-blue-900"
                   />
                 </label>

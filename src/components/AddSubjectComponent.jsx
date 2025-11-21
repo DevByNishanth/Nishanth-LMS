@@ -19,7 +19,7 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
   const dept = params.get("dept");
 
   const token = localStorage.getItem("LmsToken");
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   // states
   const [semesterType, setSemesterType] = useState("odd");
   const [searchQuery, setSearchQuery] = useState("");
@@ -107,7 +107,7 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/adminAllocation/subjects",
+        `${apiUrl}api/adminAllocation/subjects`,
         data,
         {
           headers: {

@@ -9,6 +9,7 @@ import SemesterRegistrationPage from "./pages/SemesterRegistrationPage";
 import AddSubjectPage from "./pages/AddSubjectPage";
 import HodSubjectmanagementpage from "./pages/HodSubjectmanagementpage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import TestingComponent from "./components/TestingComponent";
 
 const App = () => {
   return (
@@ -65,6 +66,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        {/* <Route path="/testing" element={<TestingComponent />} /> */}
       </Routes>
     </>
   );

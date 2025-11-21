@@ -49,7 +49,7 @@ const Sidebar = () => {
     },
     {
       icon: facultyIcon,
-      label: "Subject Management",
+      label: "Staff Allocation",
       activeIcon: facultyActiveIcon,
       link: "/dashboard/subjectManagement",
     },
