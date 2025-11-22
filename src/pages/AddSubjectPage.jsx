@@ -59,7 +59,10 @@ const AddSubjectPage = () => {
             secondColor="text-blue-700"
           />
           <div className="content-container mx-6">
-            <AddSubjectComponent facultyData={facultyData} subjectData={subjectData}/>
+            <AddSubjectComponent
+              facultyData={facultyData}
+              subjectData={subjectData}
+            />
           </div>
         </div>
       </section>

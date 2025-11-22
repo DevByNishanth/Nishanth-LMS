@@ -78,9 +78,7 @@ const HodSubjectDetailsComponent = () => {
   const [selectedStaff, setSelectedStaff] = useState("");
   const [selectedRegulation, setSelectedRegulation] = useState(2026);
   const [selectedSemester, setSelectedSemester] = useState(1);
-  const [selectedDept, setSelectedDept] = useState(
-    "Computer Science and Engineering (CSE)"
-  ); // default
+  const [selectedDept, setSelectedDept] = useState("CSE"); // default
   const [facultyDetails, setFacultyDetails] = useState([]);
 
   // const [subjectData, setSubjectData] = useState([
@@ -118,7 +116,7 @@ const HodSubjectDetailsComponent = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${apiUrl}api/allocation/dashboard?type=${selectedType}&semester=${selectedSemester}&regulation=${selectedRegulation}&department=${selectedDept}`,
+          `${apiUrl}api/hod-dashboard?type=${selectedType}&semester=${selectedSemester}&regulation=${selectedRegulation}&department=${selectedDept}`,
           {
             method: "GET",
             headers: {

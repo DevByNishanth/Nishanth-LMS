@@ -49,6 +49,8 @@ export default function SubjectRow({
   const [selectedSection, setSelectedSection] = useState(null);
   const [selectedSubjectName, setSelectedSubjectName] = useState(null);
   const [subjectId, setSubjectId] = useState(null);
+  const [semesterType, setSemesterType] = useState(null);
+  console.log("Subject data : ", item);
 
   // ref's --------------------->
   const dropdownRef = useRef(null);
@@ -77,6 +79,7 @@ export default function SubjectRow({
   // open stafflist functionality ------------------->
   const handleOpen = (sec) => {
     setSubjectId(item.id);
+    setSemesterType(item.semesterType);
     setSelectedSection(sec.sectionName);
     setSelectedSubjectName(item.subject);
     setIsModalOpen(true);
@@ -86,24 +89,21 @@ export default function SubjectRow({
   async function handleSelectStaff(staff) {
     const payload = {
       department: selectedDept,
-      type: selectedType,
+      subjectType: selectedType,
       semester: Number(selectedSemester),
       regulation: selectedRegulation,
       subjectId: subjectId,
       sectionName: selectedSection,
       staffId: staff.id,
+      semesterType: semesterType,
     };
 
     console.log("payload : ", payload);
-    const response = await axios.post(
-      `${apiUrl}api/allocation/assign-staff`,
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.post(`${apiUrl}api/assign-staff`, payload, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     console.log("resp : ", response);
   }
 

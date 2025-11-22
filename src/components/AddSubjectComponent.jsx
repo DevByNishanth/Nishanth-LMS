@@ -17,7 +17,9 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const dept = params.get("dept");
-
+  const formattedDept =
+    dept.match(/\(([^)]+)\)/)?.[1].replace(/\s+/g, "") ||
+    dept.replace(/\s+/g, "");
   const token = localStorage.getItem("LmsToken");
   const apiUrl = import.meta.env.VITE_API_URL;
   // states
@@ -102,20 +104,16 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
       subjectType: selectedType,
       regulation: regulation,
       subjects: cleanSubjects,
-      department: dept,
+      department: formattedDept,
     };
 
     try {
-      const res = await axios.post(
-        `${apiUrl}api/adminAllocation/subjects`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // 👈 required header
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const res = await axios.post(`${apiUrl}api/allocate-subjects`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`, // 👈 required header
+          "Content-Type": "application/json",
+        },
+      });
       console.log(res.data);
       alert("Subjects saved successfully!");
     } catch (err) {
