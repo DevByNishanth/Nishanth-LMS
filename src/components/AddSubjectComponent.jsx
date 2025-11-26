@@ -108,12 +108,16 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
     };
 
     try {
-      const res = await axios.post(`${apiUrl}api/allocate-subjects`, data, {
-        headers: {
-          Authorization: `Bearer ${token}`, // 👈 required header
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await axios.post(
+        `${apiUrl}api/admin-allocation/allocate-subjects`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 👈 required header
+            "Content-Type": "application/json",
+          },
+        }
+      );
       console.log(res.data);
       alert("Subjects saved successfully!");
     } catch (err) {

@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { Plus, Pencil, Edit, PencilIcon, Search } from "lucide-react";
+import {
+  Plus,
+  Pencil,
+  Edit,
+  PencilIcon,
+  Search,
+  Trash,
+  Trash2Icon,
+} from "lucide-react";
 import man from "../assets/man.svg";
 import axios from "axios";
+import StaffDeleteModal from "./StaffDeleteModal";
 const staffList = [
   {
     id: 1,
@@ -50,7 +59,9 @@ export default function SubjectRow({
   const [selectedSubjectName, setSelectedSubjectName] = useState(null);
   const [subjectId, setSubjectId] = useState(null);
   const [semesterType, setSemesterType] = useState(null);
-  console.log("Subject data : ", item);
+  const [openModalTwo, setOpenModalTwo] = useState(false);
+  const [sectionId, setSectionId] = useState(null);
+  const [deleteModal, setDeleteModal] = useState(false);
 
   // ref's --------------------->
   const dropdownRef = useRef(null);
@@ -85,8 +96,48 @@ export default function SubjectRow({
     setIsModalOpen(true);
   };
 
+  function handleOpenTwo(sec) {
+    setSectionId(sec.sectionId);
+    setSubjectId(item.id);
+    setSemesterType(item.semesterType);
+    setSelectedSection(sec.sectionName);
+    setSelectedSubjectName(item.subject);
+    setOpenModalTwo(true);
+  }
+
+  // delete
+  function handleStaffDelete(sec) {
+    setSectionId(sec.sectionId);
+    setSubjectId(item.id);
+    setSemesterType(item.semesterType);
+    setSelectedSection(sec.sectionName);
+    setSelectedSubjectName(item.subject);
+    setDeleteModal(true);
+  }
+
+  async function handleDelete() {
+    try {
+      const response = await axios.delete(
+        `${apiUrl}api/admin-allocation/delete-staff/${sectionId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      window.location.reload()
+    } catch (err) {
+      console.error("Error occured while deleting staff : ", err);
+    }
+  }
+
   // API call post
-  async function handleSelectStaff(staff) {
+  async function handleSave() {
+    if (!selectedStaff) {
+      alert("Please select a staff!");
+      return;
+    }
+
     const payload = {
       department: selectedDept,
       subjectType: selectedType,
@@ -94,17 +145,72 @@ export default function SubjectRow({
       regulation: selectedRegulation,
       subjectId: subjectId,
       sectionName: selectedSection,
-      staffId: staff.id,
+      staffId: selectedStaff.id, // from radio selection
       semesterType: semesterType,
     };
 
-    console.log("payload : ", payload);
-    const response = await axios.post(`${apiUrl}api/assign-staff`, payload, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    console.log("resp : ", response);
+    try {
+      const response = await axios.post(
+        `${apiUrl}api/admin-allocation/admin-allocation`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setSelectedDept(null);
+      setSelectedType("theory");
+      setSelectedSemester(1);
+      setSelectedRegulation(2026);
+      setSelectedSubjectName(null);
+      setSelectedSection(null);
+      setSelectedSubjectName(null);
+      setSubjectId(null);
+      // setIsModalOpen(false); // close modal
+      window.location.reload();
+    } catch (error) {
+      console.error("Error posting staff data:", error);
+    }
+  }
+
+  // edit staff
+  async function handleSaveTwo() {
+    if (!selectedStaff) {
+      alert("Please select a staff!");
+      return;
+    }
+
+    const payload = {
+      staffId: selectedStaff.id, // from radio selection
+    };
+
+    try {
+      const response = await axios.patch(
+        `${apiUrl}api/admin-allocation/update-staff/${sectionId}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setSelectedDept(null);
+      setSelectedType("theory");
+      setSelectedSemester(1);
+      setSelectedRegulation(2026);
+      setSelectedSubjectName(null);
+      setSelectedSection(null);
+      setSelectedSubjectName(null);
+      setSubjectId(null);
+      setSectionId(null);
+      // setIsModalOpen(false); // close modal
+      window.location.reload();
+    } catch (error) {
+      console.error("Error posting staff data:", error);
+    }
   }
 
   return (
@@ -115,14 +221,14 @@ export default function SubjectRow({
           {secIndex === 0 && (
             <td
               rowSpan={item.sections.length}
-              className="border-r border-gray-300 px-4 py-6 align-top w-[30%]"
+              className="border-r font-medium text-[16px] border-gray-300 px-4 py-6 align-top w-[30%]"
             >
               {item.subject}
             </td>
           )}
 
           {/* SECTION */}
-          <td className="px-4 py-3 w-[35%]">{sec.sectionName}</td>
+          <td className="px-4 py-3 w-[35%] font-medium">{sec.sectionName}</td>
 
           {/* STAFF */}
           <td
@@ -134,7 +240,16 @@ export default function SubjectRow({
               <>
                 <span className="flex items-center gap-6">
                   {sec?.staff?.name}{" "}
-                  <Pencil className="w-4 h-4 text-green-600" />
+                  <div className="flex items-center gap-2">
+                    <Pencil
+                      onClick={() => handleOpenTwo(sec)}
+                      className="w-4 h-4 text-green-600 cursor-pointer"
+                    />
+                    <Trash2Icon
+                      onClick={() => handleStaffDelete(sec)}
+                      className="text-red-400 w-4 h-4 cursor-pointer"
+                    />
+                  </div>
                 </span>
               </>
             ) : (
@@ -192,7 +307,7 @@ export default function SubjectRow({
                     checked={selectedStaff?.id === staff.id}
                     onChange={() => {
                       setSelectedStaff(staff);
-                      handleSelectStaff(staff);
+                      // handleSelectStaff(staff);
                     }}
                     className="scale-120 accent-blue-900"
                   />
@@ -212,13 +327,7 @@ export default function SubjectRow({
 
                 <button
                   className="bg-[#0B56A4] hover:bg-[#023a75] cursor-pointer text-white px-4 py-2 rounded-lg"
-                  onClick={() => {
-                    console.log(
-                      "Selected staff for section:",
-                      modalSectionIndex
-                    );
-                    setIsModalOpen(false);
-                  }}
+                  onClick={handleSave}
                 >
                   Save
                 </button>
@@ -226,6 +335,83 @@ export default function SubjectRow({
             </div>
           </div>
         </div>
+      )}
+
+      {openModalTwo && (
+        <div className="fixed inset-0 bg-black/30  justify-center z-50">
+          <div
+            ref={dropdownRef}
+            className="w-[420px] bg-white shadow absolute right-14 top-50 rounded-md py-4 px-2 h-[390px] overflow-auto"
+          >
+            {/* Search Bar */}
+            <div className="search-bar-container relative">
+              <input
+                type="text"
+                placeholder="Search Staff Name"
+                className="w-full border border-gray-400 rounded-lg px-4 py-2 outline-slate-400"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+              <button>
+                <Search className="text-gray-400 absolute top-[50%] right-4 translate-y-[-50%] " />
+              </button>
+            </div>
+
+            {/* Staff List */}
+            <div className="mt-4 max-h-[240px] overflow-y-auto pr-3 space-y-2">
+              {filteredStaff.map((staff) => (
+                <label
+                  key={staff.id}
+                  className="flex items-center justify-between border py-3 px-3  border-gray-300 cursor-pointer hover:bg-gray-50 rounded-lg"
+                >
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={staff.img}
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <p>{staff.name}</p>
+                  </div>
+
+                  <input
+                    type="radio"
+                    name="staff"
+                    checked={selectedStaff?.id === staff.id}
+                    onChange={() => {
+                      setSelectedStaff(staff);
+                      // handleSelectStaff(staff);
+                    }}
+                    className="scale-120 accent-blue-900"
+                  />
+                </label>
+              ))}
+            </div>
+
+            {/* Buttons */}
+            <div className="main-btn-container relative p-2">
+              <div className="absolute bottom-[-45px] right-0  flex justify-end gap-3 ">
+                <button
+                  className="px-4 py-2 rounded-lg border hover:bg-gray-200 border-gray-300 cursor-pointer"
+                  onClick={() => setOpenModalTwo(false)}
+                >
+                  Cancel
+                </button>
+                <h1>Two</h1>
+                <button
+                  className="bg-[#0B56A4] hover:bg-[#023a75] cursor-pointer text-white px-4 py-2 rounded-lg"
+                  onClick={handleSaveTwo}
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {deleteModal && (
+        <StaffDeleteModal
+          setDeleteModal={setDeleteModal}
+          handleDelete={handleDelete}
+        />
       )}
     </>
   );

@@ -116,7 +116,7 @@ const HodSubjectDetailsComponent = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${apiUrl}api/hod-dashboard?type=${selectedType}&semester=${selectedSemester}&regulation=${selectedRegulation}&department=${selectedDept}`,
+          `${apiUrl}api/admin-allocation/hod-dashboard?type=${selectedType}&semester=${selectedSemester}&regulation=${selectedRegulation}&department=${selectedDept}`,
           {
             method: "GET",
             headers: {
@@ -217,6 +217,8 @@ const HodSubjectDetailsComponent = () => {
                       <SubjectRow
                         key={index}
                         item={item}
+                        setFacultyDetails={setFacultyDetails}
+                        setSubjectData={setSubjectData}
                         facultyDetails={facultyDetails}
                         selectedDept={selectedDept}
                         selectedType={selectedType}
