@@ -9,9 +9,11 @@ import {
   Wand2,
   Gem,
   Code,
+  User,
   Menu,
   X,
 } from "lucide-react";
+import user from '../assets/user.svg'
 import logo from "../assets/clgLogo.svg";
 import dashboard from "../assets/dashboardIcon.svg";
 import semIcon from "../assets/semesterIcon.svg";
@@ -53,6 +55,12 @@ const Sidebar = () => {
       activeIcon: facultyActiveIcon,
       link: "/dashboard/subjectManagement",
     },
+    {
+      icon: user,
+      label: "Student Management",
+      activeIcon: user,
+      link: "/dashboard/studentManagement",
+    },
   ];
 
   // hide faculty management for HOD
@@ -63,6 +71,7 @@ const Sidebar = () => {
   return (
     <div className="relative">
       {/* Sidebar */}
+   
       <div
         className={`fixed top-0 left-0 h-screen transition-all duration-300 bg-[#D9EBFE] text-[#f5f6fa] flex flex-col overflow-hidden z-50 ${
           collapsed ? "w-[83px]" : "w-[20%]"
