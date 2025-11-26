@@ -395,7 +395,6 @@ export default function SubjectRow({
                 >
                   Cancel
                 </button>
-                <h1>Two</h1>
                 <button
                   className="bg-[#0B56A4] hover:bg-[#023a75] cursor-pointer text-white px-4 py-2 rounded-lg"
                   onClick={handleSaveTwo}

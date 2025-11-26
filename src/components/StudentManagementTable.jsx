@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search, Plus, Eye, Pencil, Trash2 } from "lucide-react";
 import noData from '../assets/noData.svg'
 import AddStudentCanvas from "./AddStudentCanvas";
-const StudentManagementTable = () => {
-  const [search, setSearch] = useState("");
-    const [isModal, setIsModal] = useState(false)
+import axios from "axios";
+import StudentDeleteModal from "./StudentDeleteModal";
   // Dummy Data
   const students = [
     {
@@ -48,22 +47,71 @@ const StudentManagementTable = () => {
       phone: "102342323232",
     },
   ];
+const StudentManagementTable = () => {
+    // Authorization
+    const token = localStorage.getItem("LmsToken");
+    const apiUrl = import.meta.env.VITE_API_URL;
 
-  // Filter Logic
-  const filteredData = students.filter((item) => {
-    const query = search.toLowerCase();
-    return (
-      item.name.toLowerCase().includes(query) ||
-      item.id.toLowerCase().includes(query)
-    );
-  });
+    // states 
+    
+    const [students, setStudents] = useState([])
+    const [search, setSearch] = useState("");
+    const [isModal, setIsModal] = useState(false)
+    const [filtered, setFiltered] = useState([])
+    const [isDeleteModal, setIsDeleteModal] = useState(false)
+    const [deletedata, setDeleteData] = useState(null)
 
+    // Filter Logic
+    function handleSearch(){
+      if(search == ""){
+        setFiltered(students)
+      }
+      const filteredData = students.filter((item) => {
+      const query = search.toLowerCase();
+        return (
+          item.firstName.toLowerCase().includes(query) ||
+          item.registerNumber.toLowerCase().includes(query)
+        );
+    });
+     setFiltered(filteredData)
+    }
+    
+
+
+    // useEffect calls 
+useEffect(() => {
+  setFiltered(students)
+}, [students])
+
+
+    useEffect(()=>{
+      handleApicall()
+    }, [])
   
+      useEffect(()=>{
+        handleSearch()
+      }, [search])
 
 // functions 
   function onClose(){
     setIsModal(false)
   }
+
+  async function handleApicall(){
+    const response = await axios.get(`${apiUrl}api/students/`,{
+      headers:  {
+        Authorization : `Bearer ${token}`
+      }
+    });
+    console.log("Response : ", response.data);
+    setStudents(response.data)
+  }
+
+  function handleDelete(item){
+    setDeleteData(item)
+    setIsDeleteModal(true)
+  }
+
   return (
     <div className="bg-white px-6 mt-3 pb-4 rounded-xl shadow-sm  border border-gray-300 mx-6 h-[calc(100vh-300px)]">
       {/* Header */}
@@ -104,22 +152,21 @@ const StudentManagementTable = () => {
               <th className="py-3 px-4 text-center">Action</th>
             </tr>
           </thead>
-
           <tbody>
-            {filteredData.length !== 0 ?(
-                filteredData.map((item, index)=>{
+            {filtered.length !== 0 ?(
+                filtered.map((item, index)=>{
                     return   <tr
                 key={index}
                 className={`text-sm ${
                   index % 2 === 0 ? "bg-gray-50" : "bg-gray-100"
                 }`}
               >
-                <td className="py-3 px-4">{item.id}</td>
-                <td className="py-3 px-4">{item.name}</td>
+                <td className="py-3 px-4">{item.registerNumber}</td>
+                <td className="py-3 px-4">{item.firstName}</td>
                 <td className="py-3 px-4">{item.year}</td>
                 <td className="py-3 px-4">{item.department}</td>
                 <td className="py-3 px-4">{item.email}</td>
-                <td className="py-3 px-4">{item.phone}</td>
+                <td className="py-3 px-4">{item.mobileNumber}</td>
                 <td className="py-3 px-4 flex justify-center gap-4">
                  <div className="bg-[#0567CE] w-8 h-8 rounded-full flex justify-center items-center">
                      <Eye
@@ -133,7 +180,7 @@ const StudentManagementTable = () => {
                     className="text-white cursor-pointer hover:scale-110"
                   />
                  </div>
-                  <div className="bg-[#F24343] w-8 h-8 rounded-full flex justify-center items-center">
+                  <div onClick={()=>handleDelete(item)} className="bg-[#F24343] w-8 h-8 rounded-full flex justify-center items-center">
                     <Trash2 size={18} className="text-white cursor-pointer hover:scale-110"/>
                     </div>
                   
@@ -149,6 +196,7 @@ const StudentManagementTable = () => {
         </table>
       </div>
       {isModal && <AddStudentCanvas onClose={onClose}/>}
+      {isDeleteModal && <StudentDeleteModal setDeleteData={setDeleteData} setIsDeleteModal={setIsDeleteModal} deletedata={deletedata} />}
     </div>
   );
 };
