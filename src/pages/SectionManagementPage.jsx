@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Sidebar from '../components/Sidebar'
 import { Bell, ChevronRight, User } from "lucide-react";
 import notification from '../assets/notification.svg'
@@ -8,6 +8,7 @@ import StudentmanagementStatCard from '../components/StudentmanagementStatCard';
 import StudentManagementStudentList from '../components/StudentManagementStudentList';
 import StudentList from '../components/StudentList';
 import SwapStudentModal from '../components/SwapStudentModal';
+import axios from 'axios';
 
 const years = [
     "2023-2024",
@@ -26,14 +27,17 @@ const year = [
 
 
 
+
 const SectionManagementPage = () => {
     // Auth 
+    const token = localStorage.getItem('LmsToken')
     const apiUrl = import.meta.env.VITE_API_URL;
+    const dept = "CSE"
 
     // states 
     const [selectedAcademicYear, setSelectedAcademicYear] = useState("2025-2026")
     const [selectedYear, setSelectedYear] = useState("1st Year");
-    const [sections, setSections] = useState(["Section A", "Section B", "Section C"])
+    const [sections, setSections] = useState(["Section A", "Section B", "Section C", "un allocated"])
     const [selectedSection, setSelectedSection] = useState("Section A")
     const [selectedStudents, setSelectedStudents] = useState([]);
     const [students, setStudents] = useState([
@@ -56,9 +60,23 @@ const SectionManagementPage = () => {
     const [isSwapModal, setIsSwapModal] = useState(false)
 
 
+    useEffect(() => {
+        handleGetData()
+    }, [])
+
     // functions 
     const onClose = () => {
         setIsSwapModal(false)
+    }
+
+    // API call 
+    async function handleGetData() {
+        const res = await axios.get(`${apiUrl}api/students/department-summary?${dept}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        console.log("res : ", res)
     }
 
     return (
