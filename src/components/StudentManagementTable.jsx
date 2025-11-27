@@ -183,8 +183,6 @@ useEffect(() => {
                   <div onClick={()=>handleDelete(item)} className="bg-[#F24343] w-8 h-8 rounded-full flex justify-center items-center">
                     <Trash2 size={18} className="text-white cursor-pointer hover:scale-110"/>
                     </div>
-                  
-
                 </td>
               </tr>
                 })
@@ -195,7 +193,7 @@ useEffect(() => {
           </tbody>
         </table>
       </div>
-      {isModal && <AddStudentCanvas onClose={onClose}/>}
+      {isModal && <AddStudentCanvas onClose={onClose} />}
       {isDeleteModal && <StudentDeleteModal setDeleteData={setDeleteData} setIsDeleteModal={setIsDeleteModal} deletedata={deletedata} />}
     </div>
   );

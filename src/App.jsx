@@ -11,6 +11,7 @@ import HodSubjectmanagementpage from "./pages/HodSubjectmanagementpage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import TestingComponent from "./components/TestingComponent";
 import StudentManagement from "./pages/StudentManagement";
+import SectionManagementPage from "./pages/SectionManagementPage";
 
 const App = () => {
   return (
@@ -72,6 +73,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <StudentManagement/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/sectionManagement"
+          element={
+            <ProtectedRoute>
+              <SectionManagementPage/>
             </ProtectedRoute>
           }
         />

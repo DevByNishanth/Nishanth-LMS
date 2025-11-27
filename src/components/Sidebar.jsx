@@ -61,6 +61,12 @@ const Sidebar = () => {
       activeIcon: user,
       link: "/dashboard/studentManagement",
     },
+    {
+      icon: user,
+      label: "Section Management",
+      activeIcon: user,
+      link: "/dashboard/sectionManagement",
+    },
   ];
 
   // hide faculty management for HOD
