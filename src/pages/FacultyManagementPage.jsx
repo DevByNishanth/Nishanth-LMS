@@ -40,7 +40,6 @@ const FacultyManagementPage = () => {
           },
         }
       );
-      console.log("chart : ", res.data);
       const formattedData = res.data.map((item) => ({
         name: item.Designation,
         value: item.Count,
@@ -66,7 +65,6 @@ const FacultyManagementPage = () => {
       const departmentFilter = await axios.get(
         `${apiUrl}api/faculty/department-wise/ECE`
       );
-      console.log("dept data : ", departmentFilter);
     }
     getData();
   }, []);

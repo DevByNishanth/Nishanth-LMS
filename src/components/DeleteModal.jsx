@@ -19,7 +19,6 @@ const DeleteModal = ({ setIsDelete, deleteId }) => {
           },
         }
       );
-      console.log("delete item : ", response.status);
       if (response.status == 200) {
         window.location.reload();
       }

@@ -112,7 +112,6 @@ const HodSubjectDetailsComponent = () => {
   // useEffect call's --------------------------------------------->
   useEffect(() => {
     // if (!selectedRegulation || !selectedSemester || !selectedType) return;
-    console.log("trying to call");
     const fetchData = async () => {
       try {
         const response = await fetch(

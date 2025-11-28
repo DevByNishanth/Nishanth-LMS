@@ -11,12 +11,11 @@ import SwapStudentModal from '../components/SwapStudentModal';
 import axios from 'axios';
 
 const years = [
-    "2023-2024",
     "2024-2025",
     "2025-2026",
     "2026-2027",
-    "2027-2028",
-];
+    "2027-2028"
+]
 
 const year = [
     "1st Year",
@@ -24,9 +23,6 @@ const year = [
     "3rd Year",
     "4th Year"
 ]
-
-
-
 
 const SectionManagementPage = () => {
     // Auth 
@@ -36,29 +32,19 @@ const SectionManagementPage = () => {
 
     // states 
     const [selectedAcademicYear, setSelectedAcademicYear] = useState("2025-2026")
-    const [selectedYear, setSelectedYear] = useState("1st Year");
+    const [selectedYear, setSelectedYear] = useState("First Year");
     const [sections, setSections] = useState(["Section A", "Section B", "Section C", "un allocated"])
-    const [selectedSection, setSelectedSection] = useState("Section A")
+    const [selectedSection, setSelectedSection] = useState("A")
     const [selectedStudents, setSelectedStudents] = useState([]);
-    const [students, setStudents] = useState([
-        { id: "26CSE001", name: "Abishek K" },
-        { id: "26CSE002", name: "Rohit S" },
-        { id: "26CSE003", name: "Manoj K" },
-        { id: "26CSE004", name: "Dinesh P" },
-        { id: "26CSE005", name: "Sanjay R" },
-        { id: "26CSE006", name: "Keerthivasan M" },
-        { id: "26CSE007", name: "Harish K" },
-        { id: "26CSE008", name: "Yugesh A" },
-        { id: "26CSE009", name: "Vijay R" },
-        { id: "26CSE010", name: "Praveen S" },
-        { id: "26CSE006", name: "Keerthivasan M" },
-        { id: "26CSE007", name: "Harish K" },
-        { id: "26CSE008", name: "Yugesh A" },
-        { id: "26CSE009", name: "Vijay R" },
-        { id: "26CSE010", name: "Praveen S" },
-    ]);
-    const [isSwapModal, setIsSwapModal] = useState(false)
+    const [students, setStudents] = useState([]);
+    const [isSwapModal, setIsSwapModal] = useState(false);
+    const [modalSectionData, setModalSectionData] = useState([])
+    // const [years, setYears] = useState([])
+    const [data, setData] = useState([])
 
+
+
+    // useEffect call's 
 
     useEffect(() => {
         handleGetData()
@@ -76,8 +62,27 @@ const SectionManagementPage = () => {
                 Authorization: `Bearer ${token}`
             }
         })
-        console.log("res : ", res)
+        setData(res.data.years);
     }
+
+    useEffect(() => {
+        async function getData() {
+            try {
+                const res = await axios.get(`${apiUrl}api/students/filter?department=${dept}&year=${selectedYear}&section=${selectedSection}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+
+                });
+                setStudents(res.data.students)
+            } catch (err) {
+                console.error("Error while fetching students data : ", err)
+            }
+        }
+        getData()
+    }, [selectedSection, selectedYear, dept])
+
+
 
     return (
         <>
@@ -86,7 +91,6 @@ const SectionManagementPage = () => {
                     <Sidebar />
                 </div>
                 <div className="container-2 w-[80%] h-full px-6">
-
                     {/* header section  */}
                     <div className="w-full flex items-center justify-between py-4  bg-white">
                         {/* Left: Breadcrumb */}
@@ -132,10 +136,10 @@ const SectionManagementPage = () => {
                         <div className="content-container mt-4 grid grid-cols-12 gap-4 h-[calc(100vh-160px)]">
                             {/* year container  */}
                             <div className="year-container col-span-3 h-[100%]">
-                                <StudentYearComponent years={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear} />
+                                <StudentYearComponent setSelectedSection={setSelectedSection} years={data} selectedYear={selectedYear} setSelectedYear={setSelectedYear} />
                             </div>
                             <div className="year-container col-span-4 h-[100%]">
-                                <StudentSectionComponent sections={sections} setSelectedSection={setSelectedSection} selectedSection={selectedSection} />
+                                <StudentSectionComponent setModalSectionData={setModalSectionData} selectedYear={selectedYear} sections={data} setSelectedSection={setSelectedSection} selectedSection={selectedSection} />
                             </div>
                             <div className="year-container col-span-5  h-[100%]">
                                 <StudentManagementStudentList
@@ -143,13 +147,14 @@ const SectionManagementPage = () => {
                                     students={students}
                                     selectedStudents={selectedStudents}
                                     setSelectedStudents={setSelectedStudents}
+                                    selectedSection={selectedSection}
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            {isSwapModal && <SwapStudentModal sections={sections} onClose={onClose} />}
+            {isSwapModal && <SwapStudentModal sections={sections} selectedStudents={selectedStudents} onClose={onClose} modalSectionData={modalSectionData} />}
 
         </>
     )

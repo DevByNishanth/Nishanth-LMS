@@ -29,11 +29,10 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
   const [selectedSemester, setSelectedSemester] = useState(1);
   const [selectedType, setSelectedType] = useState("Theory");
   const [selectedStaff, setSelectedStaff] = useState(null);
-  console.log("selectedStaff", selectedStaff);
   const [staffSearch, setStaffSearch] = useState("");
   const [isStaffList, setIsStaffList] = useState(false);
   const [regulation, setRegulation] = useState("");
-  console.log("regulation", regulation);
+
   const [selectedSubjects, setSelectedSubjects] = useState([]);
 
   // ref's
@@ -118,7 +117,6 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
           },
         }
       );
-      console.log(res.data);
       alert("Subjects saved successfully!");
     } catch (err) {
       console.error(err);

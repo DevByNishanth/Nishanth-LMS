@@ -24,8 +24,6 @@ const FacultyManagementStatCard = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("response :", response);
-
       const stats = [
         {
           title: "Total Faculty Members",

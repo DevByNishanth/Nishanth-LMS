@@ -12,7 +12,6 @@ const StudentDeleteModal = ({ setDeleteData, setIsDeleteModal, deletedata }) => 
   const handleDelete = async () => {
     try {
       const id = deletedata?._id;
-        console.log("id : ", deletedata)
       if (!id) {
         console.error("No ID found");
         return;

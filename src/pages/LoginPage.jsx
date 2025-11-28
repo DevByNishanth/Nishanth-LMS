@@ -29,9 +29,6 @@ const LoginPage = () => {
         email,
         password,
       });
-
-      console.log("Login successful:", response.data);
-
       navigate("/dashboard");
       // ✅ You can store token in localStorage if backend returns it
       localStorage.setItem("LmsToken", response.data.token);
@@ -40,7 +37,7 @@ const LoginPage = () => {
       console.error("Login error:", error);
       alert(
         error.response?.data?.message ||
-          "Invalid credentials. Please try again."
+        "Invalid credentials. Please try again."
       );
     } finally {
       setLoading(false);
@@ -133,9 +130,8 @@ const LoginPage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full ${
-                  loading ? "bg-[#0b55a4b4]" : "bg-[#0B56A4]"
-                } hover:bg-[#0b55a4e1] text-white font-semibold py-2 rounded-lg transition duration-300 cursor-pointer`}
+                className={`w-full ${loading ? "bg-[#0b55a4b4]" : "bg-[#0B56A4]"
+                  } hover:bg-[#0b55a4e1] text-white font-semibold py-2 rounded-lg transition duration-300 cursor-pointer`}
               >
                 {loading ? "Logging in..." : "Login"}
               </button>

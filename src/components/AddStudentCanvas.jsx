@@ -41,10 +41,9 @@ const AddStudentCanvas = ({ onClose }) => {
         }
       );
 
-      console.log("SUCCESS:", res.data);
       onClose();
     } catch (err) {
-      console.log("Error occured : ", err);
+      console.error("Error occured : ", err);
       
     }
   };
