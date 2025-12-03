@@ -12,6 +12,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import TestingComponent from "./components/TestingComponent";
 import StudentManagement from "./pages/StudentManagement";
 import SectionManagementPage from "./pages/SectionManagementPage";
+import SubjectPlanningPage from "./pages/SubjectPlanningPage";
+import AddSubjectContentPage from "./pages/AddSubjectContentPage";
 
 const App = () => {
   return (
@@ -72,7 +74,7 @@ const App = () => {
           path="/dashboard/studentManagement"
           element={
             <ProtectedRoute>
-              <StudentManagement/>
+              <StudentManagement />
             </ProtectedRoute>
           }
         />
@@ -80,7 +82,23 @@ const App = () => {
           path="/dashboard/sectionManagement"
           element={
             <ProtectedRoute>
-              <SectionManagementPage/>
+              <SectionManagementPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/subjectPlanning"
+          element={
+            <ProtectedRoute>
+              <SubjectPlanningPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/subjectPlanning/:subjectCode"
+          element={
+            <ProtectedRoute>
+              <AddSubjectContentPage />
             </ProtectedRoute>
           }
         />

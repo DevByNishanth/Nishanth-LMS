@@ -13,6 +13,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import bookIcon from '../assets/bookIcon.svg'
 import user from '../assets/user.svg'
 import logo from "../assets/clgLogo.svg";
 import dashboard from "../assets/dashboardIcon.svg";
@@ -67,6 +68,12 @@ const Sidebar = () => {
       activeIcon: user,
       link: "/dashboard/sectionManagement",
     },
+    {
+      icon: bookIcon,
+      label: "Subject Planning",
+      activeIcon: user,
+      link: "/dashboard/subjectPlanning",
+    },
   ];
 
   // hide faculty management for HOD
@@ -77,19 +84,17 @@ const Sidebar = () => {
   return (
     <div className="relative">
       {/* Sidebar */}
-   
+
       <div
-        className={`fixed top-0 left-0 h-screen transition-all duration-300 bg-[#D9EBFE] text-[#f5f6fa] flex flex-col overflow-hidden z-50 ${
-          collapsed ? "w-[83px]" : "w-[20%]"
-        }`}
+        className={`fixed top-0 left-0 h-screen transition-all duration-300 bg-[#D9EBFE] text-[#f5f6fa] flex flex-col overflow-hidden z-50 ${collapsed ? "w-[83px]" : "w-[20%]"
+          }`}
       >
         {/* Header */}
         <div className="flex items-center justify-center p-4 text-center">
           <a
             href="#"
-            className={`flex items-center gap-3 text-xl font-bold transition-opacity duration-300 ${
-              collapsed ? "opacity-0" : "opacity-100"
-            }`}
+            className={`flex items-center gap-3 text-xl font-bold transition-opacity duration-300 ${collapsed ? "opacity-0" : "opacity-100"
+              }`}
           >
             <img src={logo} className="w-[140px] m-auto object-cover" />
           </a>
@@ -122,9 +127,8 @@ const Sidebar = () => {
               to={role.toLowerCase() == "hod" ? item.hodLink : item.link}
               key={index}
               onClick={() => setActiveIndex(index)}
-              className={`relative h-[54px] flex items-center cursor-pointer z-10 transition-colors duration-200 px-4 ${
-                activeIndex === index ? "text-[#18283b]" : "text-black"
-              }`}
+              className={`relative h-[54px] flex items-center cursor-pointer z-10 transition-colors duration-200 px-4 ${activeIndex === index ? "text-[#18283b]" : "text-black"
+                }`}
             >
               <span className="min-w-[3rem] text-center">
                 {activeIndex == index ? (
@@ -135,9 +139,8 @@ const Sidebar = () => {
               </span>
               {!collapsed && (
                 <span
-                  className={`whitespace-nowrap font-semibold ${
-                    activeIndex === index ? "text-[#0B56A4]" : "text-[#282526] "
-                  }`}
+                  className={`whitespace-nowrap font-semibold ${activeIndex === index ? "text-[#0B56A4]" : "text-[#282526] "
+                    }`}
                 >
                   {item.label}
                 </span>
