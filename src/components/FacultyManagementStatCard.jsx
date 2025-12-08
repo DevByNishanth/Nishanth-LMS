@@ -19,36 +19,37 @@ const FacultyManagementStatCard = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get(`${apiUrl}api/faculty/stats`, {
+      const response = await axios.get(`${apiUrl}api/reports/faculty/summary`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log("resp : ", response)
       const stats = [
         {
           title: "Total Faculty Members",
-          count: response.data.totalFaculty,
+          count: response.data.data.totalFaculty,
           color: "bg-[#DED9F9]",
           iconBg: "bg-[#927DFF]",
           iconSrc: totalFac,
         },
         {
           title: "Dean’s & Hod’s",
-          count: response.data.deansAndHods,
+          count: response.data.data.deanAndHod,
           color: "bg-[#D9EBFE]",
           iconBg: "bg-[#59AAFF]",
           iconSrc: deanHod,
         },
         {
           title: "Professor",
-          count: response.data.professors,
+          count: response.data.data.professor,
           color: "bg-[#D2F8ED]",
           iconBg: "bg-[#58A08B]",
           iconSrc: professor,
         },
         {
           title: "Associate & Assistant",
-          count: response.data.associateAssistant,
+          count: response.data.data.associateAndAssistant,
           color: "bg-[#FFEED9]",
           iconBg: "bg-[#FFA73A]",
           iconSrc: assistant,
