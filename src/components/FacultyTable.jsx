@@ -82,7 +82,7 @@ const FacultyTable = () => {
       },
     });
 
-    setData(response.data);
+    setData(response.data.data);
   };
 
   const filteredData = data.filter((item) => {
@@ -140,9 +140,8 @@ const FacultyTable = () => {
               filteredData.map((item, index) => (
                 <tr
                   key={index}
-                  className={`${
-                    index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                  } border-b border-gray-200 text-[13px]`}
+                  className={`${index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                    } border-b border-gray-200 text-[13px]`}
                 >
                   <td className="py-3 px-4">{item.employeeId}</td>
                   <td className="py-3 px-4">{item.firstName}</td>

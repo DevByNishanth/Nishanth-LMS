@@ -193,11 +193,10 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
                             <div
                               key={staff.id}
                               onClick={() => setSelectedStaff(staff._id)}
-                              className={`flex items-center justify-between border border-gray-300 rounded-lg p-2 cursor-pointer transition ${
-                                selectedStaff === staff.id
-                                  ? "bg-blue-50 border-blue-500"
-                                  : ""
-                              }`}
+                              className={`flex items-center justify-between border border-gray-300 rounded-lg p-2 cursor-pointer transition ${selectedStaff === staff.id
+                                ? "bg-blue-50 border-blue-500"
+                                : ""
+                                }`}
                             >
                               <div className="flex items-center gap-3">
                                 <img
@@ -211,11 +210,10 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
                                 </p>
                               </div>
                               <div
-                                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                                  selectedStaff === staff._id
-                                    ? "border-blue-600"
-                                    : "border-gray-400"
-                                }`}
+                                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${selectedStaff === staff._id
+                                  ? "border-blue-600"
+                                  : "border-gray-400"
+                                  }`}
                               >
                                 {selectedStaff === staff._id && (
                                   <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
@@ -261,11 +259,10 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
                   <button
                     onClick={() => setSelectedSemester(sem)}
                     className={`flex items-center justify-between px-4 text-lg rounded-lg gap-2 py-3 border border-gray-300 w-[200px] transition-all
-                    ${
-                      selectedSemester === sem
+                    ${selectedSemester === sem
                         ? "bg-[#0B56A4] text-white"
                         : "bg-white text-gray-800 hover:bg-gray-100"
-                    }`}
+                      }`}
                   >
                     Semester {sem} <ChevronRight />
                   </button>
@@ -280,11 +277,10 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
               <button
                 onClick={() => setSelectedType("Theory")}
                 className={`flex items-center justify-between px-4 text-lg rounded-lg gap-2 py-3 border border-gray-300 w-[200px] transition-all
-                ${
-                  selectedType === "Theory"
+                ${selectedType === "Theory"
                     ? "bg-[#0B56A4] text-white"
                     : "bg-white text-gray-800 hover:bg-blue-100"
-                }`}
+                  }`}
               >
                 Theory <ChevronRight />
               </button>
@@ -292,11 +288,10 @@ const AddSubjectComponent = ({ facultyData, subjectData }) => {
               <button
                 onClick={() => setSelectedType("Lab")}
                 className={`flex items-center justify-between px-4 text-lg rounded-lg gap-2 py-3 border border-gray-300 w-[200px] mt-4 transition-all
-                ${
-                  selectedType === "Lab"
+                ${selectedType === "Lab"
                     ? "bg-[#0B56A4] text-white"
                     : "bg-white text-gray-800 hover:bg-blue-100"
-                }`}
+                  }`}
               >
                 Lab <ChevronRight />
               </button>

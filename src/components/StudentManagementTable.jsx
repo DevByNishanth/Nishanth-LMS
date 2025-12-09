@@ -103,7 +103,7 @@ const StudentManagementTable = () => {
         Authorization: `Bearer ${token}`
       }
     });
-    setStudents(response.data)
+    setStudents(response.data.data)
   }
 
   function handleDelete(item) {

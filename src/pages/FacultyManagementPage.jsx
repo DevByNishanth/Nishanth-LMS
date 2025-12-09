@@ -97,9 +97,8 @@ const FacultyManagementPage = () => {
                     {selectedDepartment}
                     <span>
                       <ChevronDown
-                        className={`${
-                          department ? "rotate-180" : ""
-                        } transition-all duration-300 `}
+                        className={`${department ? "rotate-180" : ""
+                          } transition-all duration-300 `}
                       />
                     </span>
                   </button>

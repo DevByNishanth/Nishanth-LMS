@@ -74,6 +74,7 @@ const SectionManagementPage = () => {
                     }
 
                 });
+                console.log("res for year data : ", res.data)
                 setStudents(res.data.students)
             } catch (err) {
                 console.error("Error while fetching students data : ", err)
